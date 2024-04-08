@@ -37,7 +37,6 @@ where
         }
     }
 
-    // Insert a node into the tree
     fn insert(&mut self, value: T) {
         match value.cmp(&self.value) {
             Ordering::Less => {
@@ -54,9 +53,7 @@ where
                     self.right = Some(Box::new(TreeNode::new(value)));
                 }
             }
-            _ => {
-                // Duplicate values are not inserted
-            }
+            _ => {}
         }
     }
 }
@@ -69,7 +66,6 @@ where
         BinarySearchTree { root: None }
     }
 
-    // Insert a value into the BST
     fn insert(&mut self, value: T) {
         match &mut self.root {
             Some(root) => root.insert(value),
@@ -77,7 +73,6 @@ where
         }
     }
 
-    // Search for a value in the BST
     fn search(&self, value: T) -> bool {
         self.root.as_ref().map_or(false, |root| root.search(value))
     }
@@ -87,7 +82,6 @@ impl<T> TreeNode<T>
 where
     T: Ord,
 {
-    // Search for a value in the tree
     fn search(&self, value: T) -> bool {
         match value.cmp(&self.value) {
             Ordering::Less => self.left.as_ref().map_or(false, |left| left.search(value)),

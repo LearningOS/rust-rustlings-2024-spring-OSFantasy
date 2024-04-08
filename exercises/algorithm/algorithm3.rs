@@ -14,6 +14,7 @@ fn sort<T: Ord>(array: &mut [T]) {
         }
     }
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;

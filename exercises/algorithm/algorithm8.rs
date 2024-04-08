@@ -61,19 +61,15 @@ pub struct myStack<T>
 impl<T> myStack<T> {
     pub fn new() -> Self {
         Self {
-			//TODO
 			q1:Queue::<T>::new(),
 			q2:Queue::<T>::new()
         }
     }
     pub fn push(&mut self, elem: T) {
-        // Push the new element into q1
         self.q1.enqueue(elem);
-        // Move all elements from q2 to q1
         while let Ok(value) = self.q2.dequeue() {
             self.q1.enqueue(value);
         }
-        // Swap q1 and q2
         std::mem::swap(&mut self.q1, &mut self.q2);
     }
     pub fn pop(&mut self) -> Result<T, &str> {

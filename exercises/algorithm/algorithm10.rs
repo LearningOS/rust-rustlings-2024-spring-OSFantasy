@@ -6,6 +6,7 @@
 
 use std::collections::{HashMap, HashSet};
 use std::fmt;
+
 #[derive(Debug, Clone)]
 pub struct NodeNotInGraph;
 impl fmt::Display for NodeNotInGraph {
@@ -13,9 +14,11 @@ impl fmt::Display for NodeNotInGraph {
         write!(f, "accessing a node that is not in the graph")
     }
 }
+
 pub struct UndirectedGraph {
     adjacency_table: HashMap<String, Vec<(String, i32)>>,
 }
+
 impl Graph for UndirectedGraph {
     fn new() -> UndirectedGraph {
         UndirectedGraph {
@@ -33,14 +36,12 @@ impl Graph for UndirectedGraph {
         let from_node = from.to_string();
         let to_node = to.to_string();
 
-        // 添加边到从节点
         if let Some(neighbors) = self.adjacency_table_mutable().get_mut(&from_node) {
             neighbors.push((to_node.clone(), weight));
         } else {
             self.adjacency_table_mutable().insert(from_node.clone(), vec![(to_node.clone(), weight)]);
         }
 
-        // 添加边到到节点
         if let Some(neighbors) = self.adjacency_table_mutable().get_mut(&to_node) {
             neighbors.push((from_node, weight));
         } else {
@@ -48,29 +49,26 @@ impl Graph for UndirectedGraph {
         }
     }
 }
+
 pub trait Graph {
     fn new() -> Self;
     fn adjacency_table_mutable(&mut self) -> &mut HashMap<String, Vec<(String, i32)>>;
     fn adjacency_table(&self) -> &HashMap<String, Vec<(String, i32)>>;
     fn add_node(&mut self, node: &str) -> bool {
-        // 如果节点已经存在，则不添加
         if self.contains(node) {
             return false;
         }
-        // 将新节点添加到邻接表
         self.adjacency_table_mutable().insert(node.to_string(), Vec::new());
         true
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         let (from, to, weight) = edge;
-        // 确保两个节点都存在于图中，如果不存在则添加
         if !self.contains(from) {
             self.add_node(from);
         }
         if !self.contains(to) {
             self.add_node(to);
         }
-        // 添加边到邻接表
         self.adjacency_table_mutable()
             .get_mut(from)
             .unwrap()
@@ -78,7 +76,7 @@ pub trait Graph {
         self.adjacency_table_mutable()
             .get_mut(to)
             .unwrap()
-            .push((from.to_string(), weight)); // 无向图，需要添加双向边
+            .push((from.to_string(), weight)); 
     }
     fn contains(&self, node: &str) -> bool {
         self.adjacency_table().get(node).is_some()
@@ -96,6 +94,7 @@ pub trait Graph {
         edges
     }
 }
+
 #[cfg(test)]
 mod test_undirected_graph {
     use super::Graph;
